@@ -4,11 +4,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
-public class Hooker {
+public class LSPlantHooker {
 
-    static class MethodCallback {
-        Method backup;
-        Object[] args;
+    static {
+        System.loadLibrary("test");
+    }
+
+   public static class MethodCallback {
+        public Method backup;
+        public Object[] args;
 
         MethodCallback(Method backup, Object[] args) {
             this.backup = backup;
@@ -22,7 +26,7 @@ public class Hooker {
     private Method replacement;
     private Object owner = null;
 
-    private Hooker() {
+    private LSPlantHooker() {
     }
 
     private native Method doHook(Member original, Method callback);
@@ -38,10 +42,10 @@ public class Hooker {
         return doUnhook(target);
     }
 
-    public static Hooker hook(Member target, Method replacement, Object owner) {
-        Hooker hooker = new Hooker();
+    public static LSPlantHooker hook(Member target, Method replacement, Object owner) {
+        LSPlantHooker hooker = new LSPlantHooker();
         try {
-            var callbackMethod = Hooker.class.getDeclaredMethod("callback", Object[].class);
+            var callbackMethod = LSPlantHooker.class.getDeclaredMethod("callback", Object[].class);
             var result = hooker.doHook(target, callbackMethod);
             if (result == null) return null;
             hooker.backup = result;

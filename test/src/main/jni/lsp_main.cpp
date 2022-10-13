@@ -31,24 +31,6 @@ bool InlineUnhooker(void* func) {
     return DobbyDestroy(func) == RT_SUCCESS;
 }
 
-extern "C"
-JNIEXPORT jboolean JNICALL
-Java_org_lsposed_lsplant_LSPTest_initHooker(JNIEnv*, jclass) {
-    return init_result;
-}
-
-extern "C"
-JNIEXPORT jobject JNICALL
-Java_org_lsposed_lsplant_Hooker_doHook(JNIEnv* env, jobject thiz, jobject target, jobject callback) {
-    return lsplant::Hook(env, target, thiz, callback);
-}
-
-extern "C"
-JNIEXPORT jboolean JNICALL
-Java_org_lsposed_lsplant_Hooker_doUnhook(JNIEnv* env, jobject, jobject target) {
-    return lsplant::UnHook(env, target);
-}
-
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM* vm, void* reserved) {
     JNIEnv* env;
@@ -68,4 +50,16 @@ JNI_OnLoad(JavaVM* vm, void* reserved) {
     };
     init_result = lsplant::Init(env, initInfo);
     return JNI_VERSION_1_6;
+}
+
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_org_lsposed_lsplant_LSPlantHooker_doHook(JNIEnv* env, jobject thiz, jobject target, jobject callback) {
+    return lsplant::Hook(env, target, thiz, callback);
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_org_lsposed_lsplant_LSPlantHooker_doUnhook(JNIEnv* env, jobject, jobject target) {
+    return lsplant::UnHook(env, target);
 }
