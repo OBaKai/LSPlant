@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import org.lsposed.lsplant.LSPlantHooker;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class MainActivity extends Activity {
@@ -40,6 +41,13 @@ public class MainActivity extends Activity {
         Log.e("llk", "setTextHook1 " + cs);
         Log.e("llk", "setTextHook2 " + cs.backup);
         Log.e("llk", "setTextHook3 " + Arrays.toString(cs.args));
+
+        try {
+            cs.backup.invoke(cs.args[0], cs.args[1]);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        //((TextView)cs.args[0]).setText((CharSequence)cs.args[1]);
     }
 
 }
