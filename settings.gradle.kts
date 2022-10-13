@@ -5,8 +5,8 @@ pluginManagement {
         mavenCentral()
     }
     plugins {
-        id("com.android.application") version "7.3.0"
-        id("com.android.library") version "7.3.0"
+        id("com.android.application") version "7.2.1"
+        id("com.android.library") version "7.2.1"
     }
 }
 dependencyResolutionManagement {
@@ -19,6 +19,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "LSPlant"
 include(
-    ":lsplant",
+//    ":lsplant",
     ":test",
 )
+include(":myapplication")
