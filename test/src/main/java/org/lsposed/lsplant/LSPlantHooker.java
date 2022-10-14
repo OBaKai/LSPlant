@@ -3,28 +3,22 @@ package org.lsposed.lsplant;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class LSPlantHooker {
 
     static {
-        System.loadLibrary("test");
+        System.loadLibrary("lsp_api");
     }
 
-   public static class MethodCallback {
-        public Method backup;
-        public Object[] args;
-
-        MethodCallback(Method backup, Object[] args) {
-            this.backup = backup;
-            this.args = args;
-        }
-    }
-
-    public Method backup;
-
+    private Method backup; //用于执行原有方法
     private Member target;
-    private Method replacement;
-    private Object owner = null;
+    private HookCallback callback;
+
+    public interface HookCallback{
+        void beforeHookedMethod(Member method, Object[] params);
+        void afterHookedMethod(Member method, Object result);
+    }
 
     private LSPlantHooker() {
     }
@@ -33,27 +27,39 @@ public class LSPlantHooker {
 
     private native boolean doUnhook(Member target);
 
-    public Object callback(Object[] args) throws InvocationTargetException, IllegalAccessException {
-        var methodCallback = new MethodCallback(backup, args);
-        return replacement.invoke(owner, methodCallback);
+    public Object nativeCallback(Object[] args) throws InvocationTargetException, IllegalAccessException {
+        //args第一个参数为hook方法所在的对象，后面的才是参数
+        Object targetObject = args[0];
+        Object[] params = null;
+        if (args.length > 1){
+            params = new Object[args.length - 1];
+            System.arraycopy(args, 1, params, 0, args.length - 1);
+        }
+
+        callback.beforeHookedMethod(target, params);
+        Object result = backup.invoke(targetObject, params);
+        callback.afterHookedMethod(target, result);
+        return result;
     }
 
     public boolean unhook() {
         return doUnhook(target);
     }
 
-    public static LSPlantHooker hook(Member target, Method replacement, Object owner) {
+    public static LSPlantHooker hook(Member target, HookCallback callback) {
+        if (callback == null) return null;
+
         LSPlantHooker hooker = new LSPlantHooker();
         try {
-            var callbackMethod = LSPlantHooker.class.getDeclaredMethod("callback", Object[].class);
+            //当hook目标被调用，native就会通知给这个java方法
+            var callbackMethod = LSPlantHooker.class.getDeclaredMethod("nativeCallback", Object[].class);
             var result = hooker.doHook(target, callbackMethod);
             if (result == null) return null;
             hooker.backup = result;
             hooker.target = target;
-            hooker.replacement = replacement;
-            hooker.owner = owner;
-        } catch (NoSuchMethodException ignored) {
-        }
+            hooker.callback = callback;
+        } catch (NoSuchMethodException ignored) { }
+
         return hooker;
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import org.lsposed.lsplant.LSPlantHooker;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
 import java.util.Arrays;
 
 public class MainActivity extends Activity {
@@ -30,24 +31,20 @@ public class MainActivity extends Activity {
     private void hook(){
         try {
             LSPlantHooker.hook(TextView.class.getDeclaredMethod("setText", CharSequence.class),
-                    MainActivity.class.getDeclaredMethod("setTextHook", LSPlantHooker.MethodCallback.class),
-                    this);
+                    new LSPlantHooker.HookCallback() {
+                        @Override
+                        public void beforeHookedMethod(Member method, Object[] params) {
+                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
+                        }
+
+                        @Override
+                        public void afterHookedMethod(Member method, Object result) {
+                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
+                        }
+                    });
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setTextHook(LSPlantHooker.MethodCallback cs){
-        Log.e("llk", "setTextHook1 " + cs);
-        Log.e("llk", "setTextHook2 " + cs.backup);
-        Log.e("llk", "setTextHook3 " + Arrays.toString(cs.args));
-
-        try {
-            cs.backup.invoke(cs.args[0], cs.args[1]);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        //((TextView)cs.args[0]).setText((CharSequence)cs.args[1]);
     }
 
 }
