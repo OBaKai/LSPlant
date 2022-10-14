@@ -50,8 +50,8 @@ public class LSPlantHooker {
         LSPlantHooker hooker = new LSPlantHooker();
         try {
             //当hook目标被调用，native就会通知给这个java方法
-            var callbackMethod = LSPlantHooker.class.getDeclaredMethod("nativeCallback", Object[].class);
-            var result = hooker.doHook(target, callbackMethod);
+            Method callbackMethod = LSPlantHooker.class.getDeclaredMethod("nativeCallback", Object[].class);
+            Method result = hooker.doHook(target, callbackMethod);
             if (result == null) return null;
             hooker.backup = result;
             hooker.target = target;
