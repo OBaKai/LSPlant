@@ -20,6 +20,6 @@ dependencyResolutionManagement {
 rootProject.name = "LSPlant"
 include(
 //    ":lsplant",
-    ":test",
+    ":lsp_api",
 )
 include(":myapplication")
