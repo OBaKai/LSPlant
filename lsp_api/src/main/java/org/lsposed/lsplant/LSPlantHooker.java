@@ -1,9 +1,7 @@
 package org.lsposed.lsplant;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 public class LSPlantHooker {
 
@@ -16,8 +14,8 @@ public class LSPlantHooker {
     private HookCallback callback;
 
     public interface HookCallback{
-        void beforeHookedMethod(Member method, Object[] params);
-        void afterHookedMethod(Member method, Object result);
+        void beforeHookedMethod(Member method, Object[] params) throws Throwable;
+        void afterHookedMethod(Member method, Object result) throws Throwable;
     }
 
     private LSPlantHooker() {
@@ -27,7 +25,7 @@ public class LSPlantHooker {
 
     private native boolean doUnhook(Member target);
 
-    public Object nativeCallback(Object[] args) throws InvocationTargetException, IllegalAccessException {
+    public Object nativeCallback(Object[] args) throws Throwable {
         //args第一个参数为hook方法所在的对象，后面的才是参数
         Object targetObject = args[0];
         Object[] params = null;
