@@ -33,12 +33,12 @@ public class MainActivity extends Activity {
             LSPlantHooker.hook(TextView.class.getDeclaredMethod("setText", CharSequence.class),
                     new LSPlantHooker.HookCallback() {
                         @Override
-                        public void beforeHookedMethod(Member method, Object[] params) {
+                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
                             Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
                         }
 
                         @Override
-                        public void afterHookedMethod(Member method, Object result) {
+                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
                             Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
                         }
                     });
