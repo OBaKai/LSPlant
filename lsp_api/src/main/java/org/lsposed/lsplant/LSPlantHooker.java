@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 //aar打包： ./gradlew :lsp_api:bundleDebugAar
@@ -39,10 +40,8 @@ public class LSPlantHooker {
         //静态方法（有参）：args都是传参的数据，args[0]并不是目标对象
         //非静态方法：args[0]是目标对象
         if (args != null && args.length > 0){
-            if (TextUtils.equals(target.getDeclaringClass().getName(),
-                    args[0].getClass().getName())){ //非静态方法
+            if (!Modifier.isStatic(target.getModifiers())){ //非静态方法
                 targetObject = args[0];
-
                 params = new Object[args.length - 1];
                 System.arraycopy(args, 1, params, 0, args.length - 1);
             }else {
