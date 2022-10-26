@@ -3,18 +3,40 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Button
-        android:id="@+id/btn_hook"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="hook"
-        />
 
     <Button
         android:id="@+id/btn_do"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="do"
+        android:text="set text"
+        />
+
+    <Button
+        android:id="@+id/btn_a1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="A class static a()"
+        />
+
+    <Button
+        android:id="@+id/btn_a2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="A class static aa(int)"
+        />
+
+    <Button
+        android:id="@+id/btn_b1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="B class b()"
+        />
+
+    <Button
+        android:id="@+id/btn_b2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="B class bb(int)"
         />
 
     <TextView

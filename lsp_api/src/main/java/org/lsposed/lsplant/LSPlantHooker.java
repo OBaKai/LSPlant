@@ -1,8 +1,13 @@
 package org.lsposed.lsplant;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
+//aar打包： ./gradlew :lsp_api:bundleDebugAar
 public class LSPlantHooker {
 
     static {
@@ -26,12 +31,24 @@ public class LSPlantHooker {
     private native boolean doUnhook(Member target);
 
     public Object nativeCallback(Object[] args) throws Throwable {
-        //args第一个参数为hook方法所在的对象，后面的才是参数
-        Object targetObject = args[0];
+        //Log.e("llk", "nativeCallback=" + Arrays.toString(args));
+        Object targetObject = null;
         Object[] params = null;
-        if (args.length > 1){
-            params = new Object[args.length - 1];
-            System.arraycopy(args, 1, params, 0, args.length - 1);
+        //三种情况
+        //静态方法（无参）：args直接是空的
+        //静态方法（有参）：args都是传参的数据，args[0]并不是目标对象
+        //非静态方法：args[0]是目标对象
+        if (args != null && args.length > 0){
+            if (TextUtils.equals(target.getDeclaringClass().getName(),
+                    args[0].getClass().getName())){ //非静态方法
+                targetObject = args[0];
+
+                params = new Object[args.length - 1];
+                System.arraycopy(args, 1, params, 0, args.length - 1);
+            }else {
+                params = new Object[args.length];
+                System.arraycopy(args, 0, params, 0, args.length);
+            }
         }
 
         callback.beforeHookedMethod(target, targetObject, params);
