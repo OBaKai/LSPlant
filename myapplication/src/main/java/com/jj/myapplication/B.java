@@ -13,8 +13,9 @@ public class B {
 
     }
 
-    public void b(){
+    public int b(){
         Log.e("llk", "b ");
+        return 10;
     }
 
     public void bb(int jj){

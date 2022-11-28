@@ -34,7 +34,8 @@ public class MainActivity extends Activity {
         });
 
         findViewById(R.id.btn_b1).setOnClickListener(view -> {
-           new B().b();
+           int i = new B().b();
+            Log.e("llk", "bbbbbbbb " + i);
         });
 
         findViewById(R.id.btn_b2).setOnClickListener(view -> {
@@ -44,32 +45,32 @@ public class MainActivity extends Activity {
 
     private void hook(){
         try {
-            Class<?> a_clazz = Class.forName("com.jj.myapplication.A");
-            LSPlantHooker.hook(a_clazz.getDeclaredMethod("a"),
-                    new LSPlantHooker.HookCallback() {
-                        @Override
-                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
-                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
-                        }
+//            Class<?> a_clazz = Class.forName("com.jj.myapplication.A");
+//            LSPlantHooker.hook(a_clazz.getDeclaredMethod("a"),
+//                    new LSPlantHooker.HookCallback() {
+//                        @Override
+//                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
+//                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
+//                        }
+//
+//                        @Override
+//                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
+//                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
+//                        }
+//                    });
 
-                        @Override
-                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
-                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
-                        }
-                    });
-
-            LSPlantHooker.hook(a_clazz.getDeclaredMethod("aa", int.class),
-                    new LSPlantHooker.HookCallback() {
-                        @Override
-                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
-                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
-                        }
-
-                        @Override
-                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
-                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
-                        }
-                    });
+//            LSPlantHooker.hook(a_clazz.getDeclaredMethod("aa", int.class),
+//                    new LSPlantHooker.HookCallback() {
+//                        @Override
+//                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
+//                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
+//                        }
+//
+//                        @Override
+//                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
+//                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
+//                        }
+//                    });
 
             Class<?> b_clazz = Class.forName("com.jj.myapplication.B");
             LSPlantHooker.hook(b_clazz.getDeclaredMethod("b"),
@@ -80,37 +81,38 @@ public class MainActivity extends Activity {
                         }
 
                         @Override
-                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
+                        public Object afterHookedMethod(Member method, Object thisObj, Object result) {
                             Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
+                            return 100;
                         }
                     });
-            LSPlantHooker.hook(b_clazz.getDeclaredMethod("bb", int.class),
-                    new LSPlantHooker.HookCallback() {
-                        @Override
-                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
-                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
-                        }
+//            LSPlantHooker.hook(b_clazz.getDeclaredMethod("bb", int.class),
+//                    new LSPlantHooker.HookCallback() {
+//                        @Override
+//                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
+//                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
+//                        }
+//
+//                        @Override
+//                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
+//                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
+//                        }
+//                    });
 
-                        @Override
-                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
-                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
-                        }
-                    });
 
 
-
-            LSPlantHooker.hook(TextView.class.getDeclaredMethod("setText", CharSequence.class),
-                    new LSPlantHooker.HookCallback() {
-                        @Override
-                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
-                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
-                        }
-
-                        @Override
-                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
-                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
-                        }
-                    });
+//            LSPlantHooker.hook(TextView.class.getDeclaredMethod("setText", CharSequence.class),
+//                    new LSPlantHooker.HookCallback() {
+//                        @Override
+//                        public void beforeHookedMethod(Member method, Object thisObj, Object[] params) {
+//                            Log.e("llk", "beforeHookedMethod " + method.getName() + " params=" + Arrays.toString(params));
+//                        }
+//
+//                        @Override
+//                        public void afterHookedMethod(Member method, Object thisObj, Object result) {
+//                            Log.e("llk", "afterHookedMethod " + method.getName() + " result=" + result);
+//                        }
+//                    });
         } catch (Exception e) {
             Log.e("llk", "fail=" + e.getMessage());
             e.printStackTrace();

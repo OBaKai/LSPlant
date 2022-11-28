@@ -21,7 +21,7 @@ public class LSPlantHooker {
 
     public interface HookCallback{
         void beforeHookedMethod(Member method, Object thisObj, Object[] params) throws Throwable;
-        void afterHookedMethod(Member method, Object thisObj, Object result) throws Throwable;
+        Object afterHookedMethod(Member method, Object thisObj, Object result) throws Throwable;
     }
 
     private LSPlantHooker() {
@@ -52,8 +52,11 @@ public class LSPlantHooker {
 
         callback.beforeHookedMethod(target, targetObject, params);
         Object result = backup.invoke(targetObject, params);
-        callback.afterHookedMethod(target, targetObject, result);
-        return result;
+        Object new_result = callback.afterHookedMethod(target, targetObject, result);
+        if (new_result == null){
+            return result;
+        }
+        return new_result;
     }
 
     public boolean unhook() {
