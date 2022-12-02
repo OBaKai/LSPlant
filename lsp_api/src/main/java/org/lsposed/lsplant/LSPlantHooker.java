@@ -1,12 +1,8 @@
 package org.lsposed.lsplant;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 
 //aar打包： ./gradlew :lsp_api:bundleDebugAar
 public class LSPlantHooker {
@@ -52,6 +48,7 @@ public class LSPlantHooker {
 
         callback.beforeHookedMethod(target, targetObject, params);
         Object result = backup.invoke(targetObject, params);
+        //支持返回值替换
         Object new_result = callback.afterHookedMethod(target, targetObject, result);
         if (new_result == null){
             return result;
